@@ -29,7 +29,7 @@ public class Boss implements Runnable {
 
 	public void addTarget(Player target) {
 		this.target.add(target);
-		System.out.println(target.name + " add target");
+//		System.out.println(target.name + " add target");
 	}
 
 	public void attack() {
@@ -46,7 +46,7 @@ public class Boss implements Runnable {
 	
 	protected Player getTarget() { //select an alive target at random
 		int index = (int)(Math.random() * this.target.size());
-		System.out.println("index = " + index);
+//		System.out.println("index = " + index);
 		return this.target.get(index);
 	}
 	
@@ -56,7 +56,7 @@ public class Boss implements Runnable {
 		for (int i = 0; i < size; i++) {
 			player = this.target.get(i);
 			if(player.name.equals(name)) {
-				System.out.println("remove " + name);
+//				System.out.println("remove " + name);
 				this.target.remove(i);
 				return;
 			}
