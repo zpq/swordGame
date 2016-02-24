@@ -13,7 +13,6 @@ public class Boss implements Runnable {
 	public int defense;
 	public int attackInterval;
 	public ArrayList<Player> target;
-	public Object object;
 	volatile boolean keepRunning = true;
 
 	public Boss(String name, int health, int minAttack, int maxAttack,
@@ -78,7 +77,7 @@ public class Boss implements Runnable {
 				e.printStackTrace();
 			}
 			if (this.getTarget().health <= 0) {
-				System.out.println(this.getTarget().name + " dead");
+//				System.out.println(this.getTarget().name + " dead");
 				//remove the dead target
 				this.removeDeadTargetByName(this.getTarget().name);
 				
@@ -88,6 +87,7 @@ public class Boss implements Runnable {
 				}
 			} else if (this.health <= 0) {
 				keepRunning = false;
+				System.out.println(this.name + " dead");
 			}
 		}
 	}

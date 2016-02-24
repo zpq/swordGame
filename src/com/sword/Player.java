@@ -12,6 +12,7 @@ public class Player implements Runnable {
 	public int defense;
 	public int attackInterval;
 	public Boss target;
+	public final Object object = new Object();
 	volatile boolean keepRunning = true;
 
 	public Player(String name, int health, int minAttack, int maxAttack,
@@ -23,16 +24,29 @@ public class Player implements Runnable {
 		this.defense = defense;
 		this.attackInterval = attackInterval;
 	}
-
+	
+//	public synchronized void attack(){
 	public void attack() {
 		Random random = new Random();
 		int s = random.nextInt(this.maxAttack)
 				% (this.maxAttack - this.minAttack + 1) + this.minAttack;
 		int damage = s - this.target.defense;
-		this.target.health -= damage;
-		System.out.println(this.name + " attack " + this.target.name
-				+ " damaged " + damage + "; " + this.target.name + " left "
-				+ this.target.health + " hp");
+		synchronized (object) {
+			int hp = this.target.health;
+//				try {
+//					object.wait();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				hp = this.target.health - damage;
+				System.out.println(this.name + " attack " + this.target.name
+						+ " damaged " + damage + "; " + this.target.name + " left "
+						+ hp + " hp");
+				this.target.health -= damage;
+				object.notifyAll();
+		}
+		
 	}
 
 	public void addTarget(Boss target) {
@@ -50,9 +64,10 @@ public class Player implements Runnable {
 			}
 			if (this.target.health <= 0) {
 				keepRunning = false;
-				System.out.println(this.target.name + " dead");
+//				System.out.println(this.target.name + " dead");
 			} else if (this.health <= 0) {
 				keepRunning = false;
+				System.out.println(this.name + " dead");
 			}
 		}
 	}
